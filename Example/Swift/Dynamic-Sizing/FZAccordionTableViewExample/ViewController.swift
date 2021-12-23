@@ -17,6 +17,13 @@ class ViewController: UIViewController {
         tableView.allowMultipleSectionsOpen = true
         tableView.register(UINib(nibName: "AccordionHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: AccordionHeaderView.kAccordionHeaderViewReuseIdentifier)
     }
+    
+    
+    
+    @IBAction func didClickButton(_ sender: Any) {
+        self.tableView.forceToggleSection(0)
+    }
+    
 }
 
 // MARK: - Extra Overrides - 
@@ -79,6 +86,9 @@ extension ViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: AccordionHeaderView.kAccordionHeaderViewReuseIdentifier)
     }
+    
+    
+    
 }
 
 // MARK: - <FZAccordionTableViewDelegate> -
@@ -102,6 +112,6 @@ extension ViewController : FZAccordionTableViewDelegate {
     }
     
     func tableView(_ tableView: FZAccordionTableView, canInteractWithHeaderAtSection section: Int) -> Bool {
-        return true
+        return false
     }
 }

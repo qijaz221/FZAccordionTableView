@@ -296,7 +296,7 @@
                 }
         }
         
-        [self closeSection:sectionToClose.integerValue withHeaderView:(FZAccordionTableViewHeaderView *)[self headerViewForSection:sectionToClose.integerValue] rowAnimation:closeAnimation];
+        [self closeSection:sectionToClose.integerValue :false withHeaderView:(FZAccordionTableViewHeaderView *)[self headerViewForSection:sectionToClose.integerValue] rowAnimation:closeAnimation];
     }
 }
 
@@ -328,10 +328,10 @@
     
     // Insert/remove rows to simulate opening/closing of a header
     if (!openSection) {
-        [self openSection:section withHeaderView:sectionHeaderView];
+        [self openSection:section :force withHeaderView:sectionHeaderView];
     }
     else { // The section is currently open
-        [self closeSection:section withHeaderView:sectionHeaderView];
+        [self closeSection:section :force withHeaderView:sectionHeaderView];
     }
     
     // Auto-collapse the rest of the opened sections
@@ -342,8 +342,8 @@
     [self endUpdates];
 }
 
-- (void)openSection:(NSInteger)section withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView {
-    if (![self canInteractWithHeaderAtSection:section]) {
+- (void)openSection:(NSInteger)section :(Boolean) force withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView {
+    if (!force && ![self canInteractWithHeaderAtSection:section]) {
         return;
     }
     
@@ -381,12 +381,12 @@
     [self endUpdates];
 }
 
-- (void)closeSection:(NSInteger)section withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView {
-    [self closeSection:section withHeaderView:sectionHeaderView rowAnimation:UITableViewRowAnimationTop];
+- (void)closeSection:(NSInteger)section :(Boolean) force withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView {
+    [self closeSection:section :force withHeaderView:sectionHeaderView rowAnimation:UITableViewRowAnimationTop];
 }
 
-- (void)closeSection:(NSInteger)section withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView rowAnimation:(UITableViewRowAnimation)rowAnimation {
-    if (![self canInteractWithHeaderAtSection:section]) {
+- (void)closeSection:(NSInteger)section :(Boolean) force withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView rowAnimation:(UITableViewRowAnimation)rowAnimation {
+    if (!force && ![self canInteractWithHeaderAtSection:section]) {
         return;
     }
     
