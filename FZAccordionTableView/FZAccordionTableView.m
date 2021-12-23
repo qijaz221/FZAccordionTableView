@@ -199,8 +199,16 @@
 
 - (void)toggleSection:(NSInteger)section { 
     FZAccordionTableViewHeaderView *headerView = (FZAccordionTableViewHeaderView *)[self headerViewForSection:section];
-    [self toggleSection:section withHeaderView:headerView];
+    [self toggleSection:section :false withHeaderView:headerView];
 }
+
+
+- (void)forceToggleSection:(NSInteger)section {
+    FZAccordionTableViewHeaderView *headerView = (FZAccordionTableViewHeaderView *)[self headerViewForSection:section];
+    [self toggleSection:section :true withHeaderView:headerView];
+}
+
+
 
 - (NSInteger)sectionForHeaderView:(UITableViewHeaderFooterView *)headerView {
     
@@ -259,7 +267,7 @@
     NSParameterAssert(sectionHeaderView);
     
     NSInteger section = [self sectionForHeaderView:sectionHeaderView];
-    [self toggleSection:section withHeaderView:sectionHeaderView];
+    [self toggleSection:section :false withHeaderView:sectionHeaderView];
 }
 
 - (void)closeAllSectionsExcept:(NSInteger)section {
@@ -294,8 +302,8 @@
 
 #pragma mark - Open / Closing
 
-- (void)toggleSection:(NSInteger)section withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView {
-    if (![self canInteractWithHeaderAtSection:section]) {
+- (void)toggleSection:(NSInteger)section :(Boolean) force withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView  {
+    if (!force && ![self canInteractWithHeaderAtSection:section]) {
         return;
     }
     
