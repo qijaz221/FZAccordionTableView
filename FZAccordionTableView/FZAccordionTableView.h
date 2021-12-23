@@ -93,6 +93,14 @@
  */
 - (void)toggleSection:(NSInteger)section;
 
+
+/*!
+ @desc  Simulates tapping of the header in the provided section.
+ 
+ @param section The section whose header should be 'tapped.'
+ */
+- (void)forceToggleSection:(NSInteger)section;
+
 /*!
  @desc  Finds the section of a header view.
  
