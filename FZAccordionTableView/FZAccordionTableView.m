@@ -209,6 +209,19 @@
 }
 
 
+- (void)openSection:(NSInteger)section {
+    FZAccordionTableViewHeaderView *headerView = (FZAccordionTableViewHeaderView *)[self headerViewForSection:section];
+    [self initOpenSection :section :true withHeaderView:headerView];
+}
+
+
+
+- (void)closeSection:(NSInteger)section {
+    FZAccordionTableViewHeaderView *headerView = (FZAccordionTableViewHeaderView *)[self headerViewForSection:section];
+    [self initCloseSection :section :true withHeaderView:headerView];
+}
+
+
 
 - (NSInteger)sectionForHeaderView:(UITableViewHeaderFooterView *)headerView {
     
@@ -341,6 +354,86 @@
     
     [self endUpdates];
 }
+
+
+
+- (void)initOpenSection:(NSInteger)section :(Boolean) force withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView  {
+    if (!force && ![self canInteractWithHeaderAtSection:section]) {
+        return;
+    }
+    
+    // Keep at least one section open
+    if (self.keepOneSectionOpen) {
+        NSInteger countOfOpenSections = 0;
+        
+        for (NSInteger i = 0; i < self.numberOfSections; i++) {
+            if ([self.sectionInfos[i] isOpen]) {
+                countOfOpenSections++;
+            }
+        }
+        
+        if (countOfOpenSections == 1 && [self isSectionOpen:section]) {
+            return;
+        }
+    }
+    
+    BOOL openSection = [self isSectionOpen:section];
+    
+    [self beginUpdates];
+    
+    // Insert/remove rows to simulate opening/closing of a header
+    if (!openSection) {
+        [self openSection:section :force withHeaderView:sectionHeaderView];
+    }
+    
+    // Auto-collapse the rest of the opened sections
+    if (!self.allowMultipleSectionsOpen && !openSection) {
+        [self closeAllSectionsExcept:section];
+    }
+    
+    [self endUpdates];
+}
+
+
+- (void)initCloseSection:(NSInteger)section :(Boolean) force withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView  {
+    if (!force && ![self canInteractWithHeaderAtSection:section]) {
+        return;
+    }
+    
+    // Keep at least one section open
+    if (self.keepOneSectionOpen) {
+        NSInteger countOfOpenSections = 0;
+        
+        for (NSInteger i = 0; i < self.numberOfSections; i++) {
+            if ([self.sectionInfos[i] isOpen]) {
+                countOfOpenSections++;
+            }
+        }
+        
+        if (countOfOpenSections == 1 && [self isSectionOpen:section]) {
+            return;
+        }
+    }
+    
+    BOOL openSection = [self isSectionOpen:section];
+    
+    [self beginUpdates];
+    
+    // Insert/remove rows to simulate opening/closing of a header
+    if (openSection) {
+        [self closeSection:section :force withHeaderView:sectionHeaderView];
+    }
+    
+    // Auto-collapse the rest of the opened sections
+    if (!self.allowMultipleSectionsOpen && !openSection) {
+        [self closeAllSectionsExcept:section];
+    }
+    
+    [self endUpdates];
+}
+
+
+
 
 - (void)openSection:(NSInteger)section :(Boolean) force withHeaderView:(nullable FZAccordionTableViewHeaderView *)sectionHeaderView {
     if (!force && ![self canInteractWithHeaderAtSection:section]) {

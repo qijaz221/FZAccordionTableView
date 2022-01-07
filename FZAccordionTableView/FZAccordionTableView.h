@@ -101,6 +101,12 @@
  */
 - (void)forceToggleSection:(NSInteger)section;
 
+
+- (void)openSection:(NSInteger)section;
+
+
+- (void)closeSection:(NSInteger)section;
+
 /*!
  @desc  Finds the section of a header view.
  
